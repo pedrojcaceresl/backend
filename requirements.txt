@@ -52,6 +52,11 @@ jq>=1.6.0
 tzdata>=2024.2
 
 # =================================
+# TESTING DEPENDENCIES
+# =================================
+aiohttp>=3.9.0
+
+# =================================
 # LEGACY SUPPORT (mantenido por compatibilidad)
 # =================================
 passlib[bcrypt]>=1.7.4
