@@ -83,7 +83,7 @@ class APITester:
             "email": "test@apitest.com",
             "password": "testpass123",
             "name": "API Test User",
-            "role": "STUDENT"
+            "role": "STUDENT"  # Will be converted to "estudiante" by validator
         }
         
         response = self.test_endpoint("/api/auth/register", "POST", register_data, 

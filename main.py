@@ -15,6 +15,17 @@ app = FastAPI(
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Add a root endpoint for /api
+@api_router.get("/")
+async def api_root():
+    """API root endpoint"""
+    return {
+        "message": "TechHub UPE API",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "status": "running"
+    }
+
 # Include all routers in the API router
 for router in routers:
     api_router.include_router(router)

@@ -37,34 +37,15 @@ class AuthController:
             if not created_user:
                 raise HTTPException(status_code=500, detail="Failed to create user")
             
-            # Create session token
-            session_token = auth_utils.generate_session_token()
-            
-            # Create session
-            session = Session(
-                user_id=created_user.id,
-                session_token=session_token,
-                expires_at=datetime.now(timezone.utc) + timedelta(days=settings.SESSION_EXPIRE_DAYS)
-            )
-            
-            created_session = await self.user_service.create_session(session)
-            if not created_session:
-                raise HTTPException(status_code=500, detail="Failed to create session")
-            
-            # Create JWT token
+            # Create JWT access token
             access_token = auth_utils.create_access_token(
                 data={"sub": created_user.email, "user_id": created_user.id}
             )
             
             return TokenResponse(
                 access_token=access_token,
-                user={
-                    "id": created_user.id,
-                    "email": created_user.email,
-                    "name": created_user.name,
-                    "role": created_user.role.value,
-                    "is_verified": created_user.is_verified
-                }
+                token_type="bearer",
+                user=created_user.dict()
             )
             
         except Exception as e:
