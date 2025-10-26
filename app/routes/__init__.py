@@ -5,6 +5,7 @@ from .jobs import router as jobs_router
 from .content import router as content_router
 from .company import router as company_router
 from .stats import router as stats_router
+from .admin import router as admin_router
 
 # List of all routers to be included in main app
 routers = [
@@ -13,7 +14,8 @@ routers = [
     jobs_router,
     content_router,
     company_router,
-    stats_router
+    stats_router,
+    admin_router
 ]
 
 __all__ = [
@@ -23,5 +25,6 @@ __all__ = [
     'content_router',
     'company_router',
     'stats_router',
+    'admin_router',
     'routers'
 ]

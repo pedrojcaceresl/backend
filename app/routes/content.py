@@ -21,20 +21,22 @@ async def get_job_service():
 @router.get("/courses", response_model=List[Course])
 async def get_courses(
     category: Optional[str] = None, 
+    search: Optional[str] = None,
     limit: int = 20,
     controller: ContentController = Depends(get_content_controller)
 ):
-    """Get courses with optional category filter"""
-    return await controller.get_courses(category, limit)
+    """Get courses with optional category and search filters"""
+    return await controller.get_courses(category, limit, search)
 
 @router.get("/events", response_model=List[Event])
 async def get_events(
     category: Optional[str] = None, 
+    search: Optional[str] = None,
     limit: int = 20,
     controller: ContentController = Depends(get_content_controller)
 ):
-    """Get upcoming events with optional category filter"""
-    return await controller.get_events(category, limit)
+    """Get upcoming events with optional category and search filters"""
+    return await controller.get_events(category, limit, search)
 
 @router.post("/saved-items")
 async def save_item(

@@ -18,11 +18,19 @@ async def get_jobs(
     modality: Optional[JobModality] = None,
     job_type: Optional[JobType] = None,
     skills: Optional[str] = None,
+    city: Optional[str] = None,
+    search: Optional[str] = None,
     limit: int = 20,
     controller: JobController = Depends(get_job_controller)
 ):
-    """Get job vacancies with filters"""
-    return await controller.get_jobs(modality, job_type, skills, limit)
+    """Get job vacancies with filters - handle 'todas las vacantes' filter"""
+    # Handle "todas las vacantes" case
+    if modality and str(modality).lower() in ["todas", "todas las vacantes", "all"]:
+        modality = None
+    if job_type and str(job_type).lower() in ["todas", "todos los tipos", "all"]:
+        job_type = None
+        
+    return await controller.get_jobs(modality, job_type, skills, city, search, limit)
 
 @router.post("", response_model=JobVacancy)
 async def create_job(

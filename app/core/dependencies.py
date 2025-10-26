@@ -43,20 +43,36 @@ async def require_auth(request: Request) -> User:
     user = await get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="Authentication required")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Account is inactive")
+    return user
+
+async def require_admin(request: Request) -> User:
+    """Require admin account"""
+    user = await require_auth(request)
+    if not user.is_admin():
+        raise HTTPException(status_code=403, detail="Admin privileges required")
     return user
 
 async def require_company(request: Request) -> User:
     """Require company account"""
     user = await require_auth(request)
-    if user.role != UserRole.COMPANY:
+    if not user.is_company():
         raise HTTPException(status_code=403, detail="Company account required")
     return user
 
 async def require_student(request: Request) -> User:
     """Require student account"""
     user = await require_auth(request)
-    if user.role != UserRole.STUDENT:
+    if not user.is_student():
         raise HTTPException(status_code=403, detail="Student account required")
+    return user
+
+async def require_company_or_admin(request: Request) -> User:
+    """Require company or admin account"""
+    user = await require_auth(request)
+    if not (user.is_company() or user.is_admin()):
+        raise HTTPException(status_code=403, detail="Company or admin account required")
     return user
 
 # Dependency for getting database

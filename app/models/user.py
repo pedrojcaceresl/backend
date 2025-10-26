@@ -11,6 +11,7 @@ class User(BaseModel):
     picture: Optional[str] = None
     role: UserRole = UserRole.STUDENT
     is_verified: bool = False
+    is_active: bool = True
     github_url: Optional[str] = None
     linkedin_url: Optional[str] = None
     portfolio_url: Optional[str] = None
@@ -22,6 +23,19 @@ class User(BaseModel):
     certificate_files: List[Dict[str, Any]] = []
     degree_files: List[Dict[str, Any]] = []
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+    
+    def is_admin(self) -> bool:
+        """Check if user is admin"""
+        return self.role == UserRole.ADMIN
+    
+    def is_company(self) -> bool:
+        """Check if user is company"""
+        return self.role == UserRole.COMPANY
+    
+    def is_student(self) -> bool:
+        """Check if user is student"""
+        return self.role == UserRole.STUDENT
 
 class UserCreate(BaseModel):
     role: Optional[UserRole] = None

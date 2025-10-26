@@ -14,13 +14,39 @@ class ContentController:
         self.event_service = event_service
         self.saved_item_service = saved_item_service
 
-    async def get_courses(self, category: Optional[str] = None, limit: int = 20) -> List[Course]:
-        """Get courses with optional category filter"""
-        return await self.course_service.get_courses(category, limit)
+    async def get_courses(self, category: Optional[str] = None, limit: int = 20, search: Optional[str] = None) -> List[Course]:
+        """Get courses with optional filters"""
+        try:
+            # Validate and clean parameters
+            if limit <= 0:
+                limit = 20
+            if limit > 100:  # Prevent excessive queries
+                limit = 100
+                
+            # Clean category filter - handle "todas las categorías" case
+            if category and category.lower() in ["todas", "todas las categorias", "all", ""]:
+                category = None
+                
+            return await self.course_service.get_courses(category, limit, search)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get courses: {str(e)}")
 
-    async def get_events(self, category: Optional[str] = None, limit: int = 20) -> List[Event]:
-        """Get upcoming events with optional category filter"""
-        return await self.event_service.get_events(category, limit)
+    async def get_events(self, category: Optional[str] = None, limit: int = 20, search: Optional[str] = None) -> List[Event]:
+        """Get upcoming events with optional filters"""
+        try:
+            # Validate and clean parameters
+            if limit <= 0:
+                limit = 20
+            if limit > 100:  # Prevent excessive queries
+                limit = 100
+                
+            # Clean category filter - handle "todas las categorías" case
+            if category and category.lower() in ["todas", "todas las categorias", "all", ""]:
+                category = None
+                
+            return await self.event_service.get_events(category, limit, search)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get events: {str(e)}")
 
     async def save_item(self, item_id: str, item_type: str, user: User) -> Dict[str, str]:
         """Save an item for user"""
