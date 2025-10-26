@@ -6,6 +6,8 @@ from .content import router as content_router
 from .company import router as company_router
 from .stats import router as stats_router
 from .admin import router as admin_router
+from .applications import router as applications_router
+from .saved_items import router as saved_items_router
 
 # List of all routers to be included in main app
 routers = [
@@ -15,7 +17,9 @@ routers = [
     content_router,
     company_router,
     stats_router,
-    admin_router
+    admin_router,
+    applications_router,
+    saved_items_router
 ]
 
 __all__ = [
@@ -26,5 +30,7 @@ __all__ = [
     'company_router',
     'stats_router',
     'admin_router',
+    'applications_router',
+    'saved_items_router',
     'routers'
 ]

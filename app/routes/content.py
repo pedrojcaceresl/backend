@@ -11,7 +11,7 @@ async def get_content_controller():
     db = await get_database()
     course_service = CourseService(db)
     event_service = EventService(db)
-    saved_item_service = SavedItemService(db)
+    saved_item_service = SavedItemService()
     return ContentController(course_service, event_service, saved_item_service)
 
 async def get_job_service():
@@ -69,7 +69,7 @@ async def save_item(
         from ..services import SavedItemService
         
         # Check if already saved
-        saved_item_service = SavedItemService(await get_database())
+        saved_item_service = SavedItemService()
         if await saved_item_service.is_item_saved(user.id, item_id, item_type):
             from fastapi import HTTPException
             raise HTTPException(status_code=400, detail="Item already saved")

@@ -33,6 +33,6 @@ class JobApplication(BaseModel):
     cv_url: Optional[str] = None
     cover_letter: Optional[str] = None
     answers: dict = {}
-    status: ApplicationStatus = ApplicationStatus.NUEVO
+    status: ApplicationStatus = ApplicationStatus.APPLIED
     notes: Optional[str] = None
     applied_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

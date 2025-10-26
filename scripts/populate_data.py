@@ -7,7 +7,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 # Add the backend directory to the Python path
-backend_dir = Path(__file__).parent.parent / "backend"
+backend_dir = Path(__file__).parent.parent
 sys.path.append(str(backend_dir))
 
 from motor.motor_asyncio import AsyncIOMotorClient
