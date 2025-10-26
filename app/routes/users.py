@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends, UploadFile, File
+from typing import List
 from ..controllers import UserController
 from ..services import UserService
 from ..core import get_database, require_auth
@@ -10,6 +11,20 @@ async def get_user_controller():
     db = await get_database()
     user_service = UserService(db)
     return UserController(user_service)
+
+@router.get("", response_model=List[User])
+async def get_users(
+    controller: UserController = Depends(get_user_controller)
+):
+    """Get all users (for admin purposes)"""
+    return await controller.get_all_users()
+
+@router.get("/profile", response_model=User)
+async def get_user_profile(
+    user: User = Depends(require_auth)
+):
+    """Get current user profile"""
+    return user
 
 @router.put("/profile")
 async def update_profile(

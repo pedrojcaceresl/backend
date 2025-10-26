@@ -31,6 +31,18 @@ class ContentController:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to get courses: {str(e)}")
 
+    async def get_course_by_id(self, course_id: str) -> Course:
+        """Get a specific course by ID"""
+        try:
+            course = await self.course_service.get_course_by_id(course_id)
+            if not course:
+                raise HTTPException(status_code=404, detail="Course not found")
+            return course
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get course: {str(e)}")
+
     async def get_events(self, category: Optional[str] = None, limit: int = 20, search: Optional[str] = None) -> List[Event]:
         """Get upcoming events with optional filters"""
         try:
@@ -47,6 +59,18 @@ class ContentController:
             return await self.event_service.get_events(category, limit, search)
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to get events: {str(e)}")
+
+    async def get_event_by_id(self, event_id: str) -> Event:
+        """Get a specific event by ID"""
+        try:
+            event = await self.event_service.get_event_by_id(event_id)
+            if not event:
+                raise HTTPException(status_code=404, detail="Event not found")
+            return event
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get event: {str(e)}")
 
     async def save_item(self, item_id: str, item_type: str, user: User) -> Dict[str, str]:
         """Save an item for user"""

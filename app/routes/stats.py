@@ -16,3 +16,10 @@ async def get_platform_stats(
 ):
     """Get platform statistics"""
     return await controller.get_platform_stats()
+
+@router.get("/overview")
+async def get_stats_overview(
+    controller: StatsController = Depends(get_stats_controller)
+):
+    """Get overall statistics overview"""
+    return await controller.get_platform_stats()  # Using the same method for now

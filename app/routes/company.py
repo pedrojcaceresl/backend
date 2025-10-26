@@ -13,6 +13,19 @@ async def get_job_controller():
     user_service = UserService(db)
     return JobController(job_service, user_service)
 
+@router.get("/profile")
+async def get_company_profile(
+    user: User = Depends(require_company)
+):
+    """Get company profile"""
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "company_name": user.company_name,
+        "role": user.role
+    }
+
 @router.get("/applications")
 async def get_company_applications(
     user: User = Depends(require_company),

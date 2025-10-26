@@ -9,6 +9,11 @@ class UserService:
         self.collection = db.users
         self.sessions_collection = db.sessions
 
+    async def get_all_users(self) -> List[User]:
+        """Get all users"""
+        users_data = await self.collection.find({}).to_list(length=None)
+        return [User(**user) for user in users_data]
+
     async def get_user_by_email(self, email: str) -> Optional[User]:
         """Get user by email"""
         user_data = await self.collection.find_one({"email": email})

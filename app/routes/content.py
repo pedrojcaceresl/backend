@@ -28,6 +28,14 @@ async def get_courses(
     """Get courses with optional category and search filters"""
     return await controller.get_courses(category, limit, search)
 
+@router.get("/courses/{course_id}", response_model=Course)
+async def get_course_by_id(
+    course_id: str,
+    controller: ContentController = Depends(get_content_controller)
+):
+    """Get a specific course by ID"""
+    return await controller.get_course_by_id(course_id)
+
 @router.get("/events", response_model=List[Event])
 async def get_events(
     category: Optional[str] = None, 
@@ -37,6 +45,14 @@ async def get_events(
 ):
     """Get upcoming events with optional category and search filters"""
     return await controller.get_events(category, limit, search)
+
+@router.get("/events/{event_id}", response_model=Event)
+async def get_event_by_id(
+    event_id: str,
+    controller: ContentController = Depends(get_content_controller)
+):
+    """Get a specific event by ID"""
+    return await controller.get_event_by_id(event_id)
 
 @router.post("/saved-items")
 async def save_item(

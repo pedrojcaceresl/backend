@@ -1,6 +1,7 @@
 from fastapi import HTTPException, Request, UploadFile
 from pathlib import Path
 from datetime import datetime, timezone
+from typing import List
 import uuid
 import json
 from ..models import User, UserCreate
@@ -11,6 +12,13 @@ from ..core import settings
 class UserController:
     def __init__(self, user_service: UserService):
         self.user_service = user_service
+
+    async def get_all_users(self) -> List[User]:
+        """Get all users (for admin purposes)"""
+        try:
+            return await self.user_service.get_all_users()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get users: {str(e)}")
 
     async def update_profile(self, request: Request, user: User) -> User:
         """Update user profile"""

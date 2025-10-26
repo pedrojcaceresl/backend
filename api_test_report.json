@@ -6,7 +6,7 @@
     "expected": 200,
     "success": true,
     "details": "Root endpoint",
-    "timestamp": "2025-10-26T01:18:31.624593"
+    "timestamp": "2025-10-26T01:21:50.989911"
   },
   {
     "endpoint": "/api",
@@ -15,7 +15,7 @@
     "expected": 200,
     "success": true,
     "details": "API root",
-    "timestamp": "2025-10-26T01:18:31.629695"
+    "timestamp": "2025-10-26T01:21:50.995896"
   },
   {
     "endpoint": "/docs",
@@ -24,7 +24,7 @@
     "expected": 200,
     "success": true,
     "details": "API documentation",
-    "timestamp": "2025-10-26T01:18:31.631950"
+    "timestamp": "2025-10-26T01:21:50.998897"
   },
   {
     "endpoint": "/api/auth/register",
@@ -33,7 +33,7 @@
     "expected": 200,
     "success": false,
     "details": "New user registration",
-    "timestamp": "2025-10-26T01:18:31.769391"
+    "timestamp": "2025-10-26T01:21:52.272760"
   },
   {
     "endpoint": "/api/auth/login",
@@ -42,7 +42,7 @@
     "expected": 200,
     "success": true,
     "details": "Login with test user",
-    "timestamp": "2025-10-26T01:18:32.279708"
+    "timestamp": "2025-10-26T01:21:52.787890"
   },
   {
     "endpoint": "/api/auth/me",
@@ -51,7 +51,7 @@
     "expected": 200,
     "success": true,
     "details": "Get current user",
-    "timestamp": "2025-10-26T01:18:32.551387"
+    "timestamp": "2025-10-26T01:21:53.062376"
   },
   {
     "endpoint": "/api/courses",
@@ -60,16 +60,16 @@
     "expected": 200,
     "success": true,
     "details": "Get all courses",
-    "timestamp": "2025-10-26T01:18:32.689658"
+    "timestamp": "2025-10-26T01:21:53.200211"
   },
   {
     "endpoint": "/api/courses/c6c28d0d-7675-4bcb-9a71-6f8cd8059ed3",
     "method": "GET",
-    "status_code": 404,
+    "status_code": 200,
     "expected": 200,
-    "success": false,
+    "success": true,
     "details": "Get specific course",
-    "timestamp": "2025-10-26T01:18:32.693668"
+    "timestamp": "2025-10-26T01:21:53.338477"
   },
   {
     "endpoint": "/api/events",
@@ -78,16 +78,16 @@
     "expected": 200,
     "success": true,
     "details": "Get all events",
-    "timestamp": "2025-10-26T01:18:32.833831"
+    "timestamp": "2025-10-26T01:21:53.477102"
   },
   {
     "endpoint": "/api/events/55fdab73-03bf-400a-b124-0b851ca9a4ee",
     "method": "GET",
-    "status_code": 404,
+    "status_code": 200,
     "expected": 200,
-    "success": false,
+    "success": true,
     "details": "Get specific event",
-    "timestamp": "2025-10-26T01:18:32.836846"
+    "timestamp": "2025-10-26T01:21:53.615239"
   },
   {
     "endpoint": "/api/jobs",
@@ -96,7 +96,7 @@
     "expected": 200,
     "success": true,
     "details": "Get all jobs",
-    "timestamp": "2025-10-26T01:18:32.976159"
+    "timestamp": "2025-10-26T01:21:53.753773"
   },
   {
     "endpoint": "/api/jobs/7c29b8e4-2d59-4f52-8ec6-caed219c2792",
@@ -105,43 +105,43 @@
     "expected": 200,
     "success": true,
     "details": "Get specific job",
-    "timestamp": "2025-10-26T01:18:33.114687"
+    "timestamp": "2025-10-26T01:21:53.891463"
   },
   {
     "endpoint": "/api/users",
     "method": "GET",
-    "status_code": 404,
+    "status_code": 200,
     "expected": 200,
-    "success": false,
+    "success": true,
     "details": "Get all users",
-    "timestamp": "2025-10-26T01:18:33.118002"
+    "timestamp": "2025-10-26T01:21:54.034051"
   },
   {
     "endpoint": "/api/users/profile",
     "method": "GET",
-    "status_code": 405,
+    "status_code": 200,
     "expected": 200,
-    "success": false,
+    "success": true,
     "details": "Get user profile",
-    "timestamp": "2025-10-26T01:18:33.120503"
+    "timestamp": "2025-10-26T01:21:54.306971"
   },
   {
     "endpoint": "/api/stats/overview",
     "method": "GET",
-    "status_code": 404,
+    "status_code": 200,
     "expected": 200,
-    "success": false,
+    "success": true,
     "details": "Get stats overview",
-    "timestamp": "2025-10-26T01:18:33.123787"
+    "timestamp": "2025-10-26T01:21:54.853003"
   },
   {
     "endpoint": "/api/company/profile",
     "method": "GET",
-    "status_code": 404,
+    "status_code": 403,
     "expected": 200,
     "success": false,
     "details": "Get company profile",
-    "timestamp": "2025-10-26T01:18:33.126797"
+    "timestamp": "2025-10-26T01:21:55.126820"
   },
   {
     "endpoint": "/api/saved-items",
@@ -150,7 +150,7 @@
     "expected": 200,
     "success": true,
     "details": "Get saved items",
-    "timestamp": "2025-10-26T01:18:33.533532"
+    "timestamp": "2025-10-26T01:21:55.538914"
   },
   {
     "endpoint": "/api/courses/nonexistent",
@@ -159,7 +159,7 @@
     "expected": 404,
     "success": true,
     "details": "Non-existent course",
-    "timestamp": "2025-10-26T01:18:33.536235"
+    "timestamp": "2025-10-26T01:21:55.678092"
   },
   {
     "endpoint": "/api/auth/me",
@@ -168,7 +168,7 @@
     "expected": 401,
     "success": false,
     "details": "Unauthorized access (no auth)",
-    "timestamp": "2025-10-26T01:18:33.810534"
+    "timestamp": "2025-10-26T01:21:55.951308"
   },
   {
     "endpoint": "/api/auth/logout",
@@ -177,6 +177,6 @@
     "expected": 200,
     "success": true,
     "details": "User logout",
-    "timestamp": "2025-10-26T01:18:33.950569"
+    "timestamp": "2025-10-26T01:21:56.092076"
   }
 ]
