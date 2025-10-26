@@ -14,7 +14,7 @@ class ApplicationService:
         self.users_collection = None
 
     async def _get_db(self):
-        if not self.db:
+        if self.db is None:
             self.db = await get_database()
             self.collection = self.db.applications
             self.jobs_collection = self.db.job_vacancies

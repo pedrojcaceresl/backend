@@ -80,11 +80,20 @@ async def health_check():
     """Health check endpoint for Render"""
     try:
         # Verificar conexión a la base de datos
-        from app.core.database import get_database
-        db = get_database()
+        from app.core.database import get_database_client
+        client = get_database_client()
+        
+        if client is None:
+            return {
+                "status": "unhealthy",
+                "service": "tech_hub-backend",
+                "version": "1.0.0",
+                "database": "disconnected",
+                "error": "Database client not initialized"
+            }
         
         # Test simple de conexión
-        server_info = await db.admin.command("ping")
+        server_info = await client.admin.command("ping")
         
         return {
             "status": "healthy",

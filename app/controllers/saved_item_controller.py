@@ -111,7 +111,7 @@ class SavedItemController:
                 detail=f"Error checking saved status: {str(e)}"
             )
 
-    async def get_saved_item_stats(self, user_id: str) -> SavedItemStats:
+    async def get_saved_items_stats(self, user_id: str) -> SavedItemStats:
         """Get saved items statistics"""
         try:
             return await self._get_service().get_saved_items_stats(user_id)
