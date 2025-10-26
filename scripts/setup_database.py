@@ -45,7 +45,7 @@ async def create_test_data():
                 "email": "admin@techhub.com",
                 "name": "Admin User",
                 "password_hash": bcrypt.hashpw("admin123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-                "role": "ADMIN",
+                "role": "admin",
                 "is_verified": True,
                 "is_active": True,
                 "created_at": datetime.now(timezone.utc)
@@ -55,7 +55,7 @@ async def create_test_data():
                 "email": "student@techhub.com", 
                 "name": "Test Student",
                 "password_hash": bcrypt.hashpw("student123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-                "role": "STUDENT",
+                "role": "estudiante",
                 "is_verified": True,
                 "is_active": True,
                 "created_at": datetime.now(timezone.utc)
@@ -65,7 +65,7 @@ async def create_test_data():
                 "email": "company@techhub.com",
                 "name": "Test Company", 
                 "password_hash": bcrypt.hashpw("company123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-                "role": "COMPANY",
+                "role": "empresa",
                 "is_verified": True,
                 "is_active": True,
                 "created_at": datetime.now(timezone.utc)
@@ -172,40 +172,50 @@ async def create_test_data():
             {
                 "id": str(uuid.uuid4()),
                 "title": "Desarrollador Frontend React",
-                "company": "TechCorp",
+                "company_id": "company-1",
+                "company_name": "TechCorp",
                 "description": "Buscamos desarrollador frontend con experiencia en React y TypeScript",
                 "requirements": ["React", "TypeScript", "CSS", "Git"],
-                "location": "Remoto",
+                "modality": "remoto",
+                "job_type": "junior",
+                "seniority_level": "Junior",
+                "skills_stack": ["React", "TypeScript", "JavaScript"],
+                "city": "Lima",
+                "country": "Paraguay",
                 "salary_range": "USD 2000-3000",
-                "job_type": "Tiempo completo",
-                "category": "Tecnología",
-                "posted_date": datetime.now(timezone.utc),
-                "application_deadline": datetime.now(timezone.utc) + timedelta(days=30),
+                "apply_type": "interno",
+                "apply_url": None,
                 "is_active": True,
+                "knockout_questions": [],
                 "created_at": datetime.now(timezone.utc)
             },
             {
                 "id": str(uuid.uuid4()),
                 "title": "Especialista en Marketing Digital",
-                "company": "MarketingPro",
+                "company_id": "company-2", 
+                "company_name": "MarketingPro",
                 "description": "Especialista en marketing digital para gestionar campañas y estrategias",
                 "requirements": ["Google Ads", "Facebook Ads", "Analytics", "SEO"],
-                "location": "Lima, Perú",
+                "modality": "presencial",
+                "job_type": "medio",
+                "seniority_level": "Semi-Senior",
+                "skills_stack": ["Marketing Digital", "SEO", "Google Ads"],
+                "city": "Asunción",
+                "country": "Paraguay",
                 "salary_range": "S/ 3000-4500",
-                "job_type": "Tiempo completo",
-                "category": "Marketing",
-                "posted_date": datetime.now(timezone.utc),
-                "application_deadline": datetime.now(timezone.utc) + timedelta(days=25),
+                "apply_type": "externo",
+                "apply_url": "https://example.com/apply",
                 "is_active": True,
+                "knockout_questions": [],
                 "created_at": datetime.now(timezone.utc)
             }
         ]
         
         # Clear existing jobs
-        await db.jobs.delete_many({})
+        await db.job_vacancies.delete_many({})
         
         # Insert sample jobs
-        result = await db.jobs.insert_many(sample_jobs)
+        result = await db.job_vacancies.insert_many(sample_jobs)
         print(f"✅ Created {len(result.inserted_ids)} sample jobs")
         
         print("\n🎉 Database populated successfully!")

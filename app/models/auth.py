@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 from typing import Optional
 
 class UserRegister(BaseModel):
@@ -7,6 +7,19 @@ class UserRegister(BaseModel):
     password: str
     name: str
     role: Optional[str] = "STUDENT"  # Default role
+    
+    @validator('role')
+    def validate_role(cls, v):
+        """Convert English roles to Spanish"""
+        role_mapping = {
+            "ADMIN": "admin",
+            "STUDENT": "estudiante", 
+            "COMPANY": "empresa",
+            "admin": "admin",
+            "estudiante": "estudiante",
+            "empresa": "empresa"
+        }
+        return role_mapping.get(v, "estudiante")  # Default to student
 
 class UserLogin(BaseModel):
     """User login model"""

@@ -28,7 +28,7 @@ class AuthController:
                 email=user_data.email,
                 name=user_data.name,
                 password_hash=password_hash,
-                role=UserRole(user_data.role) if user_data.role else UserRole.STUDENT,
+                role=UserRole(user_data.role),  # Now uses the validated role
                 is_verified=True,  # Auto-verify for local auth
                 is_active=True
             )

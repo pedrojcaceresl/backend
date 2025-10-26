@@ -8,11 +8,19 @@ class CourseService:
         self.db = db
         self.collection = db.courses
 
-    async def get_courses(self, category: Optional[str] = None, limit: int = 20) -> List[Course]:
-        """Get courses with optional category filter"""
+    async def get_courses(self, category: Optional[str] = None, limit: int = 20, search: Optional[str] = None) -> List[Course]:
+        """Get courses with optional category filter and search"""
         query = {}
         if category:
             query["category"] = category
+        
+        # Add search functionality
+        if search:
+            query["$or"] = [
+                {"title": {"$regex": search, "$options": "i"}},
+                {"description": {"$regex": search, "$options": "i"}},
+                {"provider": {"$regex": search, "$options": "i"}}
+            ]
         
         courses_data = await self.collection.find(query).limit(limit).to_list(length=None)
         return [Course(**course) for course in courses_data]

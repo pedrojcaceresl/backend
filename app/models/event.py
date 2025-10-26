@@ -8,10 +8,12 @@ class Event(BaseModel):
     title: str
     description: str
     organizer: str
-    url: str
-    event_date: datetime
+    date: datetime  # Changed from event_date to match database
     location: str
-    is_online: bool = True
     category: str
+    is_free: Optional[bool] = True
+    max_attendees: Optional[int] = None
+    url: Optional[str] = None
+    is_online: Optional[bool] = None
     image_url: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

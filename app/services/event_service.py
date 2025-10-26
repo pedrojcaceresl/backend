@@ -8,13 +8,21 @@ class EventService:
         self.db = db
         self.collection = db.events
 
-    async def get_events(self, category: Optional[str] = None, limit: int = 20) -> List[Event]:
-        """Get upcoming events with optional category filter"""
-        query = {"event_date": {"$gte": datetime.now(timezone.utc)}}
+    async def get_events(self, category: Optional[str] = None, limit: int = 20, search: Optional[str] = None) -> List[Event]:
+        """Get upcoming events with optional category filter and search"""
+        query = {"date": {"$gte": datetime.now(timezone.utc)}}  # Fixed field name
         if category:
             query["category"] = category
         
-        events_data = await self.collection.find(query).sort("event_date", 1).limit(limit).to_list(length=None)
+        # Add search functionality
+        if search:
+            query["$or"] = [
+                {"title": {"$regex": search, "$options": "i"}},
+                {"description": {"$regex": search, "$options": "i"}},
+                {"organizer": {"$regex": search, "$options": "i"}}
+            ]
+        
+        events_data = await self.collection.find(query).sort("date", 1).limit(limit).to_list(length=None)
         return [Event(**event) for event in events_data]
 
     async def get_event_by_id(self, event_id: str) -> Optional[Event]:
