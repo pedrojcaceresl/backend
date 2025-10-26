@@ -13,6 +13,8 @@ class JobController:
         modality: Optional[JobModality] = None,
         job_type: Optional[JobType] = None,
         skills: Optional[str] = None,
+        city: Optional[str] = None,
+        search: Optional[str] = None,
         limit: int = 20
     ) -> List[JobVacancy]:
         """Get job vacancies with filters"""
@@ -21,9 +23,17 @@ class JobController:
             filters["modality"] = modality
         if job_type:
             filters["job_type"] = job_type
+        if city:
+            filters["city"] = city
         if skills:
             skill_list = [s.strip() for s in skills.split(",")]
             filters["skills_stack"] = {"$in": skill_list}
+        if search:
+            filters["$or"] = [
+                {"title": {"$regex": search, "$options": "i"}},
+                {"description": {"$regex": search, "$options": "i"}},
+                {"company_name": {"$regex": search, "$options": "i"}}
+            ]
         
         return await self.job_service.get_jobs(filters, limit)
 
