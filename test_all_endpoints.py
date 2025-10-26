@@ -45,7 +45,7 @@ class APITester:
         
         # Add authentication if required
         if auth_required and self.session_token:
-            headers["Cookie"] = f"session_token={self.session_token}"
+            headers["Authorization"] = f"Bearer {self.session_token}"
         
         try:
             if method == "GET":
@@ -79,8 +79,10 @@ class APITester:
         print("\n🔐 Testing Authentication...")
         
         # Test user registration (should work or user already exists)
+        import time
+        unique_email = f"test{int(time.time())}@apitest.com"
         register_data = {
-            "email": "test@apitest.com",
+            "email": unique_email,
             "password": "testpass123",
             "name": "API Test User",
             "role": "STUDENT"  # Will be converted to "estudiante" by validator
@@ -100,9 +102,7 @@ class APITester:
         
         if response and "access_token" in response:
             self.auth_token = response["access_token"]
-            # Extract session token from cookies if available
-            if hasattr(self.session, 'cookies'):
-                self.session_token = self.session.cookies.get('session_token')
+            self.session_token = response["access_token"]  # Use access_token for auth
             print(f"🎯 Authentication successful - Token: {self.auth_token[:20]}...")
             return True
         else:
@@ -178,9 +178,9 @@ class APITester:
         self.test_endpoint("/api/stats/overview", "GET", expected_status=200,
                           description="Get stats overview")
         
-        # 8. Company endpoints (if available)
+        # 8. Company endpoints (should return 403 for non-company user)
         print("\n🏢 Testing Company Endpoints...")
-        self.test_endpoint("/api/company/profile", "GET", expected_status=200, auth_required=True,
+        self.test_endpoint("/api/company/profile", "GET", expected_status=403, auth_required=True,
                           description="Get company profile")
         
         # 9. Saved items endpoints

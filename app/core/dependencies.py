@@ -6,36 +6,38 @@ from ..services import UserService
 from .database import get_database
 
 async def get_current_user(request: Request) -> Optional[User]:
-    """Get current user from session token"""
-    session_token = request.cookies.get("session_token")
-    if not session_token:
-        auth_header = request.headers.get("Authorization")
-        if auth_header and auth_header.startswith("Bearer "):
-            session_token = auth_header.split(" ")[1]
+    """Get current user from JWT token"""
+    token = None
     
-    if not session_token:
+    # Check Authorization header first
+    auth_header = request.headers.get("Authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.split(" ")[1]
+    
+    # Fallback to cookies
+    if not token:
+        token = request.cookies.get("session_token")
+    
+    if not token:
         return None
     
+    # Import auth_utils
+    from ..utils.auth import auth_utils
+    
+    # Verify JWT token
+    payload = auth_utils.verify_token(token)
+    if not payload:
+        return None
+    
+    # Get user from database
     db = await get_database()
     user_service = UserService(db)
     
-    session = await user_service.get_session_by_token(session_token)
-    if not session:
+    user_email = payload.get("sub")
+    if not user_email:
         return None
     
-    # Handle timezone comparison
-    expires_at = session.expires_at
-    if isinstance(expires_at, str):
-        expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
-    
-    # Make sure both datetimes are timezone-aware
-    if expires_at.tzinfo is None:
-        expires_at = expires_at.replace(tzinfo=timezone.utc)
-    
-    if expires_at < datetime.now(timezone.utc):
-        return None
-    
-    user = await user_service.get_user_by_id(session.user_id)
+    user = await user_service.get_user_by_email(user_email)
     return user
 
 async def require_auth(request: Request) -> User:
