@@ -8,6 +8,7 @@ class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     email: EmailStr
     name: str
+    password_hash: Optional[str] = None  # For local authentication
     picture: Optional[str] = None
     role: UserRole = UserRole.STUDENT
     is_verified: bool = False

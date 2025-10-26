@@ -16,14 +16,13 @@ class Settings:
     
     # Auth
     SESSION_EXPIRE_DAYS: int = 7
+    JWT_SECRET_KEY: str = os.environ.get('JWT_SECRET_KEY', 'default-secret-change-me')
+    AUTH_MODE: str = os.environ.get('AUTH_MODE', 'local')  # 'local' or 'oauth'
     
     # File uploads
     UPLOAD_DIR: Path = ROOT_DIR / 'uploads'
     ALLOWED_FILE_EXTENSIONS: list = ['.pdf']
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB
-    
-    # External API
-    AUTH_API_BASE_URL: str = "https://demobackend.emergentagent.com/auth/v1/env/oauth"
 
 # Create global settings instance
 settings = Settings()

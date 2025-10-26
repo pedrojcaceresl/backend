@@ -3,6 +3,7 @@ import jwt
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import secrets
+from ..core.config import settings
 
 class AuthUtils:
     """Utilities for authentication and password management"""
@@ -11,8 +12,8 @@ class AuthUtils:
         # Password hashing
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         
-        # JWT secret (in production, use environment variable)
-        self.SECRET_KEY = "your-secret-key-change-this-in-production"
+        # JWT secret from settings
+        self.SECRET_KEY = settings.JWT_SECRET_KEY
         self.ALGORITHM = "HS256"
         self.ACCESS_TOKEN_EXPIRE_MINUTES = 30
     
