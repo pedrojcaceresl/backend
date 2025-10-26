@@ -34,12 +34,21 @@ for router in routers:
 app.include_router(api_router)
 
 # Add CORS middleware
+# Configure CORS origins for production
+cors_origins = settings.CORS_ORIGINS.split(',') if hasattr(settings, 'CORS_ORIGINS') and settings.CORS_ORIGINS else [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173"
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=settings.CORS_ORIGINS.split(','),
-    allow_methods=["*"],
+    allow_origins=cors_origins,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Configure logging
@@ -68,8 +77,30 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
-    return {"status": "healthy", "service": "upe-program-api"}
+    """Health check endpoint for Render"""
+    try:
+        # Verificar conexión a la base de datos
+        from app.core.database import get_database
+        db = get_database()
+        
+        # Test simple de conexión
+        server_info = await db.admin.command("ping")
+        
+        return {
+            "status": "healthy",
+            "service": "tech_hub-backend",
+            "version": "1.0.0",
+            "database": "connected" if server_info else "disconnected",
+            "environment": settings.ENVIRONMENT if hasattr(settings, 'ENVIRONMENT') else "unknown"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "service": "tech_hub-backend",
+            "version": "1.0.0",
+            "database": "disconnected",
+            "error": str(e)
+        }
 
 if __name__ == "__main__":
     import uvicorn

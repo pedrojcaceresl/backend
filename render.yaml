@@ -1,0 +1,50 @@
+services:
+  # Web Service (FastAPI Backend)
+  - type: web
+    name: backend-api
+    runtime: python
+    plan: free  # o 'starter' si prefieres un plan pago
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    env: python
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: ENVIRONMENT
+        value: production
+      - key: JWT_SECRET_KEY
+        generateValue: true  # Render generará automáticamente una clave secreta
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 1440
+      - key: MONGODB_URL
+        fromDatabase:
+          name: backend-mongodb
+          property: connectionString
+    # Configuración de salud del servicio
+    healthCheckPath: /health
+
+  # MongoDB Database
+  - type: pserv
+    name: backend-mongodb
+    runtime: docker
+    plan: free  # o 'starter' si prefieres un plan pago
+    repo: https://github.com/render-examples/mongodb.git
+    envVars:
+      - key: MONGO_INITDB_ROOT_USERNAME
+        value: admin
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        generateValue: true  # Render generará automáticamente una contraseña
+      - key: MONGO_INITDB_DATABASE
+        value: tech_hub
+    disk:
+      name: mongodb-data
+      mountPath: /data/db
+      sizeGB: 1  # 1GB es suficiente para empezar
+
+# Configuraciones adicionales
+databases:
+  - name: backend-mongodb
+    databaseName: tech_hub
+    user: admin
