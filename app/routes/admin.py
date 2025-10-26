@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import List, Optional
 from ..controllers import UserController
 from ..services import UserService
-from ..core import get_database, require_admin
+from ..core import get_database 
+from ..core.dependencies import require_admin
 from ..models import User, UserCreate
 from ..models.enums import UserRole
 
