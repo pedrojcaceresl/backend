@@ -1,0 +1,66 @@
+from fastapi import HTTPException
+from typing import Optional, List, Dict, Any
+from ..models import Course, Event, SavedItem, User
+from ..services import CourseService, EventService, SavedItemService
+
+class ContentController:
+    def __init__(
+        self, 
+        course_service: CourseService,
+        event_service: EventService,
+        saved_item_service: SavedItemService
+    ):
+        self.course_service = course_service
+        self.event_service = event_service
+        self.saved_item_service = saved_item_service
+
+    async def get_courses(self, category: Optional[str] = None, limit: int = 20) -> List[Course]:
+        """Get courses with optional category filter"""
+        return await self.course_service.get_courses(category, limit)
+
+    async def get_events(self, category: Optional[str] = None, limit: int = 20) -> List[Event]:
+        """Get upcoming events with optional category filter"""
+        return await self.event_service.get_events(category, limit)
+
+    async def save_item(self, item_id: str, item_type: str, user: User) -> Dict[str, str]:
+        """Save an item for user"""
+        # Check if already saved
+        if await self.saved_item_service.is_item_saved(user.id, item_id, item_type):
+            raise HTTPException(status_code=400, detail="Item already saved")
+        
+        # Get the item data
+        item_data = None
+        if item_type == "course":
+            item_data = await self.course_service.get_course_by_id(item_id)
+        elif item_type == "event":
+            item_data = await self.event_service.get_event_by_id(item_id)
+        elif item_type == "job":
+            # This would need JobService import - we'll handle it in routes
+            raise HTTPException(status_code=400, detail="Job saving handled separately")
+        else:
+            raise HTTPException(status_code=400, detail="Invalid item type")
+        
+        if not item_data:
+            raise HTTPException(status_code=404, detail="Item not found")
+        
+        saved_item = SavedItem(
+            user_id=user.id,
+            item_id=item_id,
+            item_type=item_type,
+            item_data=item_data.dict()
+        )
+        
+        await self.saved_item_service.save_item(saved_item)
+        return {"message": "Item saved successfully"}
+
+    async def unsave_item(self, item_id: str, item_type: str, user: User) -> Dict[str, str]:
+        """Remove item from saved items"""
+        success = await self.saved_item_service.unsave_item(user.id, item_id, item_type)
+        if not success:
+            raise HTTPException(status_code=404, detail="Saved item not found")
+        
+        return {"message": "Item removed from saved"}
+
+    async def get_saved_items(self, user: User) -> Dict[str, List[Dict[str, Any]]]:
+        """Get all saved items for user"""
+        return await self.saved_item_service.get_user_saved_items(user.id)
